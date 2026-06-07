@@ -65,6 +65,16 @@
 
 - Prefer Codex OpenSpec skills over manual artifact choreography.
 - OpenSpec phases are: `proposal`, `design`, `specs`, `tasks`, `apply`, and `archive`.
+- Treat `openspec/changes/` as the canonical home for active change artifacts
+- Treat `openspec/changes/archive/` as the history of completed changes.
+- Treat `openspec/specs/` as compact system specs for bounded contexts and key capabilities.
+- Treat `docs/specs/` as a tool-agnostic bridge for spec workflow guidance, templates, and the mapping between `docs/` and `openspec/`.
+- Do not store active change packages, change-specific requirements, design, tasks, or duplicates of `openspec/changes/` in `docs/specs/`.
+- When a completed or accepted change affects long-lived behavior, structure, terminology, or process guidance, update the relevant files under `docs/` in the same change.
+- After closing or archiving each OpenSpec change, check `docs/TODO.md` to see whether the change fully closes any listed task. If a task is only partially closed, stop and ask the user whether to update, split, keep, or remove it.
+
+## OpenSpec Manual Phase Gate and Fast-Forward Rules
+
 - By default, execute exactly one OpenSpec phase per assistant turn.
 - The only authorization to execute more than one OpenSpec phase in the same turn is an explicit user message containing the standalone token `ff`.
 - `ff` only permits crossing phase boundaries that are explicitly requested or unambiguously required by the named action. It never chooses the target phase by itself.
@@ -91,11 +101,3 @@ Examples:
 - `continue to design` -> create `design.md` only
 - `ff existing-change` -> does not imply `apply`; if the change is already ready through `tasks`, run the intra-change consistency check, report the result, and ask for the target phase
 - `$openspec-apply-change ff existing-change` -> may complete missing pre-apply artifacts and then implement, but must still stop before `archive`
-
-- Treat `openspec/changes/` as the canonical home for active change artifacts
-- Treat `openspec/changes/archive/` as the history of completed changes.
-- Treat `openspec/specs/` as compact system specs for bounded contexts and key capabilities.
-- Treat `docs/specs/` as a tool-agnostic bridge for spec workflow guidance, templates, and the mapping between `docs/` and `openspec/`.
-- Do not store active change packages, change-specific requirements, design, tasks, or duplicates of `openspec/changes/` in `docs/specs/`.
-- When a completed or accepted change affects long-lived behavior, structure, terminology, or process guidance, update the relevant files under `docs/` in the same change.
-- After closing or archiving each OpenSpec change, check `docs/TODO.md` to see whether the change fully closes any listed task. If a task is only partially closed, stop and ask the user whether to update, split, keep, or remove it.
