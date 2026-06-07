@@ -6,26 +6,24 @@
 - Before implementing, state a short scope interpretation that names what is in scope and what is out of scope. Keep later edits inside that scope unless the user explicitly expands it.
 - If anything material is unclear, stop and ask the user the full set of clarification questions needed to remove that ambiguity before proceeding.
 - Do not make repository-wide claims such as "no more cases remain" without a mechanical search or equivalent proof. Run the search first, then state the conclusion.
-- Before sending a response, perform a response lint: enforce chat formatting rules, ensure lists use explicit IDs, distinguish hypotheses from confirmed facts, and avoid stronger certainty than the evidence supports.
+- Before sending a response, perform a response lint: ensure response lists follow `Response List Formatting Rules`, distinguish hypotheses from confirmed facts, and avoid stronger certainty than the evidence supports.
 - In explore or planning work, start with black-box capabilities and user-visible outcomes. Only decompose into white-box internals when the user explicitly asks for implementation detail.
-- If durable files contradict each other, or if a change artifact is ambiguous about whether durable guidance should be updated, stop and ask the user how to proceed.
-- If facts in different files contradict each other, do not make changes and ask the user how to proceed
+- If facts in different files contradict each other, do not make changes and ask the user how to proceed.
+- If a change artifact is ambiguous about whether durable guidance should be updated, stop and ask the user how to proceed.
 - Never use `cat << EOF` to generate files. If you cannot create a file via normal editing, stop and report the error to the user.
 - Always use `apply_patch` for file edits. If `apply_patch` cannot be used, stop and report the blocker to the user before making any file changes.
 - Never use the backtick character in bash command invocations.
 - After two or three consistent preference corrections from the user, explicitly recalibrate your default choices for the rest of the session and favor those preferences automatically.
-- Before any non-trivial decision, ask: "Does this solve the current request, or only my fear of future changes?" If it is mainly about future-proofing, do not do it without explicit user approval.
 - Run the relevant tests after changes.
 
 ## General Coding Guidelines
 
-- Do not introduce extra classes, facades, or wrappers when duck typing and convention over configuration already keep the code clear and sufficient.
 - Do not introduce new dependencies without a short justification in the patch or docs.
 - If an existing library provides the needed capability, use that library instead of implementing the capability in this repository.
 - Default to simplify-first choices. Prefer flat values over wrappers, duck typing over formal protocols, a single execution path over optional modes, and direct exceptions over wrappers until real complexity is required by the current request.
-- Treat support status as a required gate for new projects and platform-level version changes, not as an optional follow-up check.
+- Add a new abstraction only when at least one of these conditions is true: there is a second real consumer, the same logic is duplicated in multiple places, or the abstraction clearly makes the current code simpler.
 - Before running generators or pinning library or framework versions, verify the official support matrix and prefer a supported release series over a merely familiar or locally available one.
-- Do not start or pin the project to an unsupported or EOL library or framework versions unless the user explicitly approves that exception and the reason is documented in the relevant change artifact or ADR.
+- Do not start or pin the project to unsupported or EOL library or framework versions unless the user explicitly approves that exception and the reason is documented in the relevant change artifact or ADR.
 - Do not spend effort cleaning generated noise such as `tmp/`, `log/`, or `coverage/` when `.gitignore` or normal tooling already handles it, unless the user explicitly asks for cleanup or those files block the task.
 
 ## Response List Formatting Rules
@@ -94,7 +92,6 @@ Examples:
 - `ff existing-change` -> does not imply `apply`; if the change is already ready through `tasks`, run the intra-change consistency check, report the result, and ask for the target phase
 - `$openspec-apply-change ff existing-change` -> may complete missing pre-apply artifacts and then implement, but must still stop before `archive`
 
-- Do not execute multiple OpenSpec phases in a single pass unless the user explicitly invokes the `ff` command.
 - Treat `openspec/changes/` as the canonical home for active change artifacts
 - Treat `openspec/changes/archive/` as the history of completed changes.
 - Treat `openspec/specs/` as compact system specs for bounded contexts and key capabilities.
